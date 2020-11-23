@@ -1,0 +1,33 @@
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xmlns:mvc="http://www.springframework.org/schema/mvc"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+							http://www.springframework.org/schema/beans/spring-beans.xsd
+							http://www.springframework.org/schema/context
+							http://www.springframework.org/schema/context/spring-context.xsd
+							http://www.springframework.org/schema/mvc
+							http://www.springframework.org/schema/mvc/spring-mvc.xsd">
+    <context:component-scan base-package="com.zy.controller"></context:component-scan>
+
+    <mvc:annotation-driven></mvc:annotation-driven>
+    <import resource="classpath:spring-context.xml"></import>
+    <bean class="org.springframework.web.servlet.view.InternalResourceViewResolver">
+        <property name="prefix" value="/"></property>
+        <property name="suffix" value=".jsp"></property>
+    </bean>
+    <!-- 配置哪些方法进行拦截-->
+    <mvc:interceptors>
+        <mvc:interceptor>
+            <!-- /** 代表所有方法进行拦截-->
+            <mvc:mapping path="/**"/>
+            <!-- mvc:exclude-mappint 代表放行，不进行拦截-->
+            <mvc:exclude-mapping path="/user/*"></mvc:exclude-mapping>
+            <bean class="com.zy.interceptor.MyInterceptor"></bean>
+        </mvc:interceptor>
+    </mvc:interceptors>
+    <!-- 文件上传解析器-->
+    <bean id="multipartResolver" class="org.springframework.web.multipart.commons.CommonsMultipartResolver">
+        <property name="maxUploadSize" value="104857600"></property>
+    </bean>
+</beans>
