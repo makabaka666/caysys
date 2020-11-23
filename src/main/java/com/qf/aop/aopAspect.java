@@ -1,4 +1,4 @@
-package com.zy.aop;
+package com.qf.aop;
 
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
@@ -10,7 +10,7 @@ import org.springframework.stereotype.Component;
 @Component
 public class aopAspect {
     //声明切点
-    @Pointcut("execution(* com.zy.service.impl.*.*(..))")
+    @Pointcut("execution(* com.qf.service.impl.*.*(..))")
     public void point(){
 
     }
