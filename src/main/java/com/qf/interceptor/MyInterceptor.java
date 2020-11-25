@@ -13,11 +13,11 @@ public class MyInterceptor implements HandlerInterceptor {
     //controller 调用之前执行的方法
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
         HttpSession session = request.getSession();
-        Object name = session.getAttribute("userName");
+        Object name = session.getAttribute("tel");
         if (name!=null){
             return true;
         }
-        request.getRequestDispatcher("/login.jsp").forward(request,response);
+        request.getRequestDispatcher("/pagehome/login.html").forward(request,response);
         return false;
     }
 

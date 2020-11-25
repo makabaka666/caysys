@@ -3,5 +3,32 @@
         PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.qf.dao.UserMapper">
+    <select id="selectByTelAndPassword" resultType="user">
+        SELECT  *  FROM  sys_user where tel=#{tel} and password = #{password}
+    </select>
 
+    <insert id="insertUser">
+        insert  into sys_user(tel,password,email,invitation)  values(#{tel},#{password},#{email},#{invitation})
+    </insert>
+
+    <update id="update">
+            update sys_user
+            <trim prefix="set" suffixOverrides=",">
+                <if test="tel!=null and tel != ''">
+                    tel = #{tel},
+                </if>
+                <if test="password!=null and password !=''">
+                    password = #{password},
+                </if>
+                <if test="email!=null and email !=''">
+                    email = #{email},
+                </if>
+                <if test="invitation!=null and invitation !=''">
+                    invitation = #{invitation},
+                </if>
+            </trim>
+            <where>
+                id= #{id}
+            </where>
+    </update>
 </mapper>

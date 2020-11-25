@@ -3,5 +3,14 @@
         PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.qf.dao.CarMapper">
+    <select id="selectAll" resultType="car">
+        select * from sys_car order by price asc
+    </select>
+    <select id="selectAllByNumber" resultType="car">
+        select * from sys_car order by number desc
+    </select>
 
+    <select id="selectOne" resultType="car">
+        select * from sys_car where id = #{cid}
+    </select>
 </mapper>
