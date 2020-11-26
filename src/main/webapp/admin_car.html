@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <link rel="stylesheet" href="css/bootstrap.min.css">
+    <link rel="stylesheet" href="layui/css/layui.css"  media="all">
+    <link rel="stylesheet" href="css/shortrent.shortrent.css">
+    <link rel="stylesheet" href="css/body1.css">
+    <script type="application/javascript" src="js/jquery-3.3.1.js"></script>
+    <script type="application/javascript" src="js/bootstrap.min.js"></script>
+    <script type="application/javascript" src="layui/layui.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/vue"></script>
+
+</head>
+<body>
+
+<table class="layui-hide" id="test" lay-filter="test" ></table>
+
+<script type="text/html" id="barDemo">
+    <a class="layui-btn layui-btn-primary layui-btn-xs" lay-event="detail">查看</a>
+    <a class="layui-btn layui-btn-xs" lay-event="edit">编辑</a>
+    <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del">删除</a>
+</script>
+<script>
+    //JavaScript代码区域
+    layui.use('table', function(){
+        var table = layui.table;
+
+        table.render({
+            elem: '#test'
+            ,url:'/car/selectOneById'
+            ,cols: [[
+                {field:'id', width:80,height:60, title: 'ID', sort: true}
+                ,{field:'name', width:80, height:60, title: '汽车名字'}
+                ,{field:'type', width:80, height:60, title: '类型'}
+                ,{field: 'sitnum', width:80, height:60,  title: 'sitnum'}
+                ,{field: 'cid', width:80, height:60, title: 'cid'}
+                ,{field: 'price', width:80, height:60,  title: '价格'}
+                ,{field: 'number', width:80, height:60, title: '数量'}
+                ,{field:'picture', width:180,height:60,  title: '图片',templet:'<div><img src="{{d.picture}}"></div>'}
+                ,{fixed: 'right', width:178,height:60,  align:'center', toolbar: '#barDemo'}
+            ]]
+            ,page: true
+        });
+        table.on('tool(test)', function(obj){
+            var data = obj.data;
+            if(obj.event === 'detail'){
+                layer.msg('ID：'+ data.id + ' 的查看操作');
+            } else if(obj.event === 'del'){
+                layer.confirm('真的删除行么', function(index){
+
+                    $.ajax({
+                        url:'/car/deleteById?',
+                        data:JSON.stringify({id:data.id}),
+                        type:'post',
+                        dataType: 'json',
+                        contentType:"application/json",
+                        success:function(res){
+                            if (res==1){
+                                obj.del();
+                                layer.close(index);
+                            }
+                        },
+                        error:function(){
+                            alert("删除失败")
+                        }
+                    })
+
+                });
+            } else if(obj.event === 'edit'){
+
+                window.location.href="car.html"
+                window.localStorage.setItem("id",data.id);
+               /* $.ajax({
+                    url:'/car/update',
+                    data:JSON.stringify(c)
+                })*/
+            }
+        });
+    });
+</script>
+</body>
+</html>
