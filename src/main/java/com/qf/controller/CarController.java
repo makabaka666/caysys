@@ -1,18 +1,14 @@
 package com.qf.controller;
 
+import com.github.pagehelper.PageInfo;
 import com.qf.pojo.Car;
 import com.qf.pojo.DateType;
 import com.qf.service.CarService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpRequest;
-import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/car")
@@ -44,6 +40,40 @@ public class CarController {
         date.setCode(1);
         date.setInfo(car);
         return date;
+    }
+
+
+
+
+    @RequestMapping("/selectAllCar")
+    public DateType selectAllCar(Integer page,Integer limit){
+        List<Car> car = carService.selectAllCar(page,limit);
+        PageInfo pageInfo = new PageInfo(car);
+        DateType date = new DateType();
+        date.setCount(pageInfo.getTotal());
+        date.setCode(0);
+        date.setData(car);
+        return date;
+    }
+    @RequestMapping(value = "/selectOneById",method = RequestMethod.POST)
+    public DateType selectOneById(@RequestBody Map map){
+        Car car = carService.selectOneById(Integer.valueOf(map.get("id").toString()));
+        DateType date = new DateType();
+        date.setCode(0);
+        date.setData(car);
+        return date;
+    }
+    @RequestMapping(value = "/updateById",method = RequestMethod.POST)
+    public Integer updateById(@RequestBody Car car){
+        if (car.getId()==null){
+            return carService.insertCar(car);
+        }else{
+            return carService.updateById(car);
+        }
+    }
+    @RequestMapping(value = "/deleteById",method = RequestMethod.POST)
+    public Integer deleteById(@RequestBody Map map){
+        return  carService.deleteById(Integer.valueOf(map.get("id").toString()));
     }
 
 

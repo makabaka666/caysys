@@ -13,4 +13,52 @@
     <select id="selectOne" resultType="car">
         select * from sys_car where id = #{cid}
     </select>
+
+
+
+    <select id="selectAllCar" resultType="car">
+        select * from sys_car
+    </select>
+
+    <select id="selectOneById" resultType="car">
+        select * from sys_car  where id=#{id}
+    </select>
+
+    <insert id="insertCar">
+        insert  into sys_car(name,type,sitnum,cid,price,number,picture)  values(#{name},#{type},#{sitnum},#{cid},#{price},#{number},#{picture})
+    </insert>
+
+    <update id="updateById">
+        update sys_car
+        <trim prefix="set" suffixOverrides=",">
+            <if test="name!=null and name != ''">
+                name = #{name},
+            </if>
+            <if test="type!=null and type !=''">
+                type = #{type},
+            </if>
+            <if test="sitnum!=null">
+                sitnum = #{sitnum},
+            </if>
+            <if test="cid!=null">
+                cid = #{cid},
+            </if>
+            <if test="price!=null">
+                price = #{price},
+            </if>
+            <if test="number!=null">
+                number = #{number},
+            </if>
+            <if test="picture!=null and picture !=''">
+                picture = #{picture},
+            </if>
+        </trim>
+        <where>
+            id= #{id}
+        </where>
+    </update>
+
+    <delete id="deleteById">
+         delete from sys_car where id=#{id}
+    </delete>
 </mapper>

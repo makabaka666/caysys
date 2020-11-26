@@ -14,4 +14,5 @@ public class DateType {
     private List info;
     private Long count;
     private Object data;
+    private String name;
 }

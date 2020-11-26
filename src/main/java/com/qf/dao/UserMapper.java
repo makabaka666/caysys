@@ -10,4 +10,9 @@ public interface UserMapper {
    User selectByTelAndPassword(@Param("tel") String tel,@Param("password") String password);
    Integer insertUser(User user);
    Integer update(User user);
+
+
+   List selectAll();
+   User selectOneById(@Param("id")Integer id);
+   Integer deleteById(@Param("id")Integer id);
 }

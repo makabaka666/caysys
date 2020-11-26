@@ -1,20 +1,19 @@
 package com.qf.controller;
 
+import com.github.pagehelper.PageInfo;
 import com.qf.pojo.DateType;
 import com.qf.pojo.User;
 import com.qf.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.bind.annotation.SessionAttributes;
+import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 @SessionAttributes("user")
 @RestController
@@ -109,8 +108,52 @@ public class UserController {
             date.setCode(0);
             return date;
         }
+    }
+        @RequestMapping(value = "/getName",method = RequestMethod.GET)
+        public DateType getName(HttpServletRequest request, HttpServletResponse response,String password) {
+        HttpSession session = request.getSession();
+        User user = (User) session.getAttribute("user");
+        String name = user.getTel();
+        DateType date = new DateType();
+        if (user!= null) {
+            date.setCode(1);
+            date.setName(name);
+            return date;
+        } else {
+            date.setCode(0);
+            return date;
+        }
+    }
 
-
+    @RequestMapping("/selectAll")
+    public DateType selectAll(Integer page,Integer limit){
+        List user = userService.selectAll(page,limit);
+        PageInfo pageInfo = new PageInfo(user);
+        DateType date = new DateType();
+        date.setCount(pageInfo.getTotal());
+        date.setData(user);
+        date.setCode(0);
+        return date;
+    }
+    @RequestMapping("/selectOneById")
+    public DateType selectOneById(@RequestBody Map map){
+        User users = userService.selectOneById(Integer.valueOf(map.get("id").toString()));
+        DateType date = new DateType();
+        date.setData(users);
+        date.setCode(0);
+        return date;
+    }
+    @RequestMapping(value = "/updateById",method = RequestMethod.POST)
+    public Integer updateById(@RequestBody User user){
+        if (user.getId()==null){
+            return userService.insertUser(user);
+        }else{
+            return userService.update(user);
+        }
+    }
+    @RequestMapping(value = "/deleteById",method = RequestMethod.POST)
+    public Integer deleteById(@RequestBody Map map){
+       return  userService.deleteById(Integer.valueOf(map.get("id").toString()));
     }
 
 }

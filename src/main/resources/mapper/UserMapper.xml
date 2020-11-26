@@ -31,4 +31,16 @@
                 id= #{id}
             </where>
     </update>
+
+    <select id="selectAll" resultType="user">
+        select * from sys_user
+    </select>
+
+    <select id="selectOneById" resultType="user">
+        select * from sys_user where id=#{id}
+    </select>
+
+    <delete id="deleteById">
+        delete from sys_user where id=#{id}
+    </delete>
 </mapper>
